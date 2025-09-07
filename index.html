@@ -1,117 +1,1580 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Italy 2025  - Dual Maps</title>
+    <title>Italy 2025 🇮🇹</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.5; color: #1a202c; background: #f7fafc; }
-        .header { background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); color: white; padding: 1.5rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem; }
-        .header p { font-size: 0.9rem; opacity: 0.9; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
-        .section { padding: 1.5rem 0; }
-        .section-title { font-size: 1.4rem; text-align: center; margin-bottom: 1.5rem; color: #2d3748; font-weight: 600; }
-        .dual-maps-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-        .family-map-container { background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .family-map-header { text-align: center; margin-bottom: 1rem; padding: 0.75rem; border-radius: 6px; color: white; font-weight: 600; font-size: 1.1rem; }
-        .family-map-header.clements { background: linear-gradient(135deg, #48bb78, #38a169); }
-        .family-map-header.knights { background: linear-gradient(135deg, #ed8936, #dd6b20); }
-        .dual-map { height: 400px; border-radius: 6px; width: 100%; }
-        .btn { background: #4299e1; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 1rem; font-size: 1rem; }
-        .btn:hover { background: #3182ce; }
-        @media (max-width: 768px) { 
-            .dual-maps-container { grid-template-columns: 1fr; gap: 1rem; } 
-            .dual-map { height: 300px; } 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .footer { background: #2d3748; color: white; text-align: center; padding: 1.5rem; margin-top: 2rem; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            line-height: 1.5;
+            color: #1a202c;
+            background: #f7fafc;
+            font-size: 16px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 99;
+            padding: 5rem 2rem 2rem 2rem;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu h3 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .menu-section {
+            margin-bottom: 2rem;
+        }
+
+        .menu-section h4 {
+            color: #4299e1;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .menu-link {
+            display: block;
+            color: #4a5568;
+            text-decoration: none;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            transition: color 0.2s;
+        }
+
+        .menu-link:hover {
+            color: #4299e1;
+        }
+
+        .menu-link:last-child {
+            border-bottom: none;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 98;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Resource links styling */
+        .resource-link {
+            color: #4299e1;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .resource-link:hover {
+            color: #3182ce;
+            text-decoration: underline;
+        }
+
+        .info-note {
+            color: #718096;
+        }
+
+        /* Family itinerary tabs */
+        .family-tabs {
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .family-tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            background: #f8fafc;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #4a5568;
+        }
+
+        .family-tab.active {
+            background: #4299e1;
+            color: white;
+        }
+
+        .family-tab:hover {
+            background: #e2e8f0;
+        }
+
+        .family-tab.active:hover {
+            background: #3182ce;
+        }
+
+        .itinerary-content {
+            display: none;
+        }
+
+        .itinerary-content.active {
+            display: block;
+        }
+
+        .family-highlight {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .family-highlight.knights {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0 1rem;
+        }
+
+        .section {
+            padding: 1.5rem 0;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        /* Arrival Information Styles */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .arrival-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .flight-detail {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #4299e1;
+        }
+
+        .trip-motto {
+            margin-top: 1rem;
+            font-style: italic;
+            color: #718096;
+        }
+
+        /* Calendar Layout */
+        .calendar {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(13, 1fr);
+            gap: 0.5rem;
+            min-width: 650px;
+        }
+
+        .month-header {
+            grid-column: span 8;
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .month-header.october {
+            grid-column: span 5;
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+        }
+
+        .day-number {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.8rem;
+        }
+
+        .city-day {
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.75rem;
+            line-height: 1.2;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .city-day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .city-day.venice { background: linear-gradient(135deg, #4299e1, #3182ce); }
+        .city-day.florence { background: linear-gradient(135deg, #ed8936, #dd6b20); }
+        .city-day.siena { background: linear-gradient(135deg, #38b2ac, #319795); }
+        .city-day.sorrento { background: linear-gradient(135deg, #48bb78, #38a169); }
+        .city-day.alassio { background: linear-gradient(135deg, #9f7aea, #805ad5); }
+        .city-day.naples { background: linear-gradient(135deg, #f56565, #e53e3e); }
+        .city-day.milan { background: linear-gradient(135deg, #ec4899, #d53f8c); }
+        .city-day.departure { background: linear-gradient(135deg, #718096, #4a5568); }
+
+        .city-number {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: white;
+            color: #2d3748;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Mobile calendar adjustments */
+        @media (max-width: 768px) {
+            .calendar {
+                padding: 1rem;
+                overflow-x: auto;
+            }
+            
+            .calendar-grid {
+                min-width: 600px;
+            }
+            
+            .city-day {
+                font-size: 0.7rem;
+                padding: 0.4rem;
+            }
+            
+            .month-header {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+        }
+
+        /* Map Container */
+        .map-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .map {
+            height: 300px;
+            border-radius: 6px;
+            width: 100%;
+        }
+
+        /* Destination Cards */
+        .destinations {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .destination-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #4299e1;
+        }
+
+        .destination-card h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-row {
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-text {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Touch-friendly buttons */
+        .btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1rem;
+            min-height: 44px;
+        }
+
+        .btn:hover, .btn:active {
+            background: #3182ce;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            width: auto;
+            margin: 0.5rem 0 0 0;
+            min-height: 36px;
+        }
+
+        @media (min-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .hamburger {
+                display: none;
+            }
+            
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .map {
+                height: 400px;
+            }
+            
+            .destinations {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            
+            .calendar {
+                padding: 1rem;
+                overflow-x: auto;
+            }
+            
+            .calendar-grid {
+                min-width: 600px;
+            }
+            
+            .city-day {
+                font-size: 0.7rem;
+                padding: 0.4rem;
+            }
+            
+            .month-header {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+        }
+
+        /* Mobile styles */
+        @media (max-width: 767px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .destinations {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Desktop styles */
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1000px;
+            }
+            
+            .destinations {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .timeline {
+                padding: 2rem;
+            }
+            
+            .map-container {
+                padding: 2rem;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a202c;
+                color: #e2e8f0;
+            }
+            
+            .timeline, .map-container, .destination-card {
+                background: #2d3748;
+                color: #e2e8f0;
+            }
+            
+            .info-row {
+                border-bottom-color: #4a5568;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1> Italy 2025 - Dual Maps</h1>
-        <p>Sep 23 - Oct 4  Two Family Adventures</p>
+        <div class="header-content">
+            <div class="header-title">
+                <h1>🇮🇹 Italy 2025</h1>
+                <p>Sep 23 - Oct 4 • Two Family Adventures</p>
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
     </div>
+
+    <!-- Mobile Menu -->
+    <div class="overlay" onclick="toggleMenu()"></div>
+    <div class="mobile-menu">
+        <h3>🇮🇹 Trip Resources</h3>
+        
+        <div class="menu-section">
+            <h4>🍽️ Food Tours & Experiences</h4>
+            <a href="https://www.eatingeurope.com/rome-food-tours/" class="menu-link" target="_blank">Eating Europe - Rome Tours</a>
+            <a href="https://www.eatingeurope.com/florence-food-tours/" class="menu-link" target="_blank">Eating Europe - Florence Tours</a>
+            <a href="https://www.eatingeurope.com/venice-food-tours/" class="menu-link" target="_blank">Eating Europe - Venice Tours</a>
+        </div>
+
+        <div class="menu-section">
+            <h4>🚇 Transportation</h4>
+            <a href="https://www.trenitalia.com/en.html" class="menu-link" target="_blank">Trenitalia - Train Tickets</a>
+            <a href="https://www.italotreno.it/en" class="menu-link" target="_blank">Italo - High Speed Trains</a>
+            <a href="https://www.atac.roma.it/en" class="menu-link" target="_blank">Rome Public Transport</a>
+        </div>
+
+        <div class="menu-section">
+            <h4>🎫 Attractions & Tickets</h4>
+            <a href="https://www.uffizi.it/en/tickets" class="menu-link" target="_blank">Uffizi Gallery - Florence</a>
+            <a href="https://www.palazzoducale.visitmuve.it/en/home/" class="menu-link" target="_blank">Doge's Palace - Venice</a>
+            <a href="https://pompeiisites.org/" class="menu-link" target="_blank">Pompeii Archaeological Site</a>
+            <a href="https://www.duomomilano.it/en/" class="menu-link" target="_blank">Milan Cathedral</a>
+        </div>
+
+        <div class="menu-section">
+            <h4>📱 Useful Apps</h4>
+            <a href="https://translate.google.com/" class="menu-link" target="_blank">Google Translate</a>
+            <a href="https://www.tripadvisor.com/" class="menu-link" target="_blank">TripAdvisor</a>
+            <a href="https://maps.google.com/" class="menu-link" target="_blank">Google Maps (Offline)</a>
+        </div>
+
+        <div class="menu-section">
+            <h4>💰 Money & Tips</h4>
+            <a href="https://www.xe.com/currencyconverter/" class="menu-link" target="_blank">Currency Converter</a>
+            <a href="#" class="menu-link">Tipping: 10-15% at restaurants</a>
+            <a href="#" class="menu-link">Emergency: 112 (EU Emergency)</a>
+        </div>
+    </div>
+
     <div class="container">
         <div class="section">
-            <h2 class="section-title">Trip Maps - Family Routes</h2>
-            <div class="dual-maps-container">
-                <div class="family-map-container">
-                    <div class="family-map-header clements">
-                         Clements Family Journey
+            <h2 class="section-title">Family Itineraries</h2>
+            
+            <!-- Family Selection Tabs -->
+            <div class="family-tabs">
+                <button class="family-tab active" onclick="showItinerary('clements')">
+                    🏰 Clements Family
+                </button>
+                <button class="family-tab" onclick="showItinerary('knights')">
+                    ⚔️ Knights Family
+                </button>
+            </div>
+
+            <!-- Clements Itinerary -->
+            <div id="clements-itinerary" class="itinerary-content active">
+                <div class="calendar">
+                    <div class="calendar-grid">
+                        <!-- Month Headers -->
+                        <div class="month-header">September 2025</div>
+                        <div class="month-header october">October 2025</div>
+                        
+                        <!-- Day Numbers -->
+                        <div class="day-number">23</div>
+                        <div class="day-number">24</div>
+                        <div class="day-number">25</div>
+                        <div class="day-number">26</div>
+                        <div class="day-number">27</div>
+                        <div class="day-number">28</div>
+                        <div class="day-number">29</div>
+                        <div class="day-number">30</div>
+                        <div class="day-number">1</div>
+                        <div class="day-number">2</div>
+                        <div class="day-number">3</div>
+                        <div class="day-number">4</div>
+                        <div class="day-number">5</div>
+                        
+                        <!-- Clements Cities -->
+                        <div class="city-day venice">
+                            <div class="city-number">1</div>
+                            Venice<br>🏛️
+                        </div>
+                        <div class="city-day venice">
+                            <div class="city-number">1</div>
+                            Venice<br>🏛️
+                        </div>
+                        <div class="city-day florence">
+                            <div class="city-number">2</div>
+                            Florence<br>🎨
+                        </div>
+                        <div class="city-day florence">
+                            <div class="city-number">2</div>
+                            Florence<br>🎨
+                        </div>
+                        <div class="city-day siena">
+                            <div class="city-number">3</div>
+                            Siena<br>🏰
+                        </div>
+                        <div class="city-day alassio">
+                            <div class="city-number">4</div>
+                            Alassio<br>🏖️
+                        </div>
+                        <div class="city-day alassio">
+                            <div class="city-number">4</div>
+                            Alassio<br>🏖️
+                        </div>
+                        <div class="city-day alassio">
+                            <div class="city-number">4</div>
+                            Alassio<br>�️
+                        </div>
+                        <div class="city-day alassio">
+                            <div class="city-number">4</div>
+                            Alassio<br>🏖️
+                        </div>
+                        <div class="city-day alassio">
+                            <div class="city-number">4</div>
+                            Alassio<br>🏖️
+                        </div>
+                        <div class="city-day milan">
+                            <div class="city-number">5</div>
+                            Milan<br>🛍️
+                        </div>
+                        <div class="city-day milan">
+                            <div class="city-number">5</div>
+                            Milan<br>🛍️
+                        </div>
+                        <div class="city-day departure">
+                            Depart<br>✈️
+                        </div>
                     </div>
-                    <div id="clements-map" class="dual-map"></div>
-                    <button class="btn" onclick="fitMapToBounds('clements')">Show All Clements Stops</button>
                 </div>
-                <div class="family-map-container">
-                    <div class="family-map-header knights">
-                         Knights Family Journey
+            </div>
+
+            <!-- Knights Itinerary -->
+            <div id="knights-itinerary" class="itinerary-content">
+                <div class="calendar">
+                    <div class="calendar-grid">
+                        <!-- Month Headers -->
+                        <div class="month-header">September 2025</div>
+                        <div class="month-header october">October 2025</div>
+                        
+                        <!-- Day Numbers -->
+                        <div class="day-number">23</div>
+                        <div class="day-number">24</div>
+                        <div class="day-number">25</div>
+                        <div class="day-number">26</div>
+                        <div class="day-number">27</div>
+                        <div class="day-number">28</div>
+                        <div class="day-number">29</div>
+                        <div class="day-number">30</div>
+                        <div class="day-number">1</div>
+                        <div class="day-number">2</div>
+                        <div class="day-number">3</div>
+                        <div class="day-number">4</div>
+                        <div class="day-number">5</div>
+                        
+                        <!-- Knights Cities -->
+                        <div class="city-day venice">
+                            <div class="city-number">1</div>
+                            Venice<br>🏛️
+                        </div>
+                        <div class="city-day venice">
+                            <div class="city-number">1</div>
+                            Venice<br>�️
+                        </div>
+                        <div class="city-day florence">
+                            <div class="city-number">2</div>
+                            Florence<br>🎨
+                        </div>
+                        <div class="city-day florence">
+                            <div class="city-number">2</div>
+                            Florence<br>🎨
+                        </div>
+                        <div class="city-day siena">
+                            <div class="city-number">3</div>
+                            Siena<br>�
+                        </div>
+                        <div class="city-day sorrento">
+                            <div class="city-number">4</div>
+                            Sorrento<br>🌊
+                        </div>
+                        <div class="city-day sorrento">
+                            <div class="city-number">4</div>
+                            Sorrento<br>🌊
+                        </div>
+                        <div class="city-day sorrento">
+                            <div class="city-number">4</div>
+                            Sorrento<br>🌊
+                        </div>
+                        <div class="city-day sorrento">
+                            <div class="city-number">4</div>
+                            Sorrento<br>🌊
+                        </div>
+                        <div class="city-day naples">
+                            <div class="city-number">5</div>
+                            Naples<br>🍕
+                        </div>
+                        <div class="city-day naples">
+                            <div class="city-number">5</div>
+                            Naples<br>🍕
+                        </div>
+                        <div class="city-day departure">
+                            Naples<br>✈️
+                        </div>
+                        <div class="day-number"></div>
                     </div>
-                    <div id="knights-map" class="dual-map"></div>
-                    <button class="btn" onclick="fitMapToBounds('knights')">Show All Knights Stops</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🛫 Arrival Information</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>✈️ Flight Details</h3>
+                    <div class="arrival-info">
+                        <div class="flight-detail">
+                            <strong>Megan & Lesa</strong><br>
+                            Flight: UA 321<br>
+                            Arrival: 7:55 AM
+                        </div>
+                        <div class="flight-detail">
+                            <strong>Sally & Sandra</strong><br>
+                            Flight: Delta<br>
+                            Arrival: 11:35 AM
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>📅 Trip Duration</h3>
+                    <p><strong>September 23 - October 4, 2025</strong></p>
+                    <p>12 amazing days in Italy!</p>
+                    <p class="trip-motto">Get ready to consume copious amounts of wine, pasta, and gelato!! 🇮🇹</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Trip Map</h2>
+            <div class="map-container">
+                <div id="main-map" class="map"></div>
+                <button class="btn" onclick="map.fitBounds(group.getBounds())">Show All Cities</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Hotels & Details</h2>
+            <div class="destinations">
+                <div class="destination-card">
+                    <h3>🏛️ Venice <span class="family-highlight">Both Families</span></h3>
+                    <div class="info-row">
+                        <div class="info-label">Accommodation</div>
+                        <div class="info-text">Airbnb<br>Calle de Ca' Raspi, 1557, Venice, Veneto 30125, Italy</div>
+                        <button class="btn btn-small" onclick="showHotelOnMap('venice', 45.4408, 12.3155, 'Venice Airbnb')">📍 Show on Map</button>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Must See</div>
+                        <div class="info-text">St. Mark's Square, Rialto Market, Gondola ride</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Restaurants</div>
+                        <div class="info-text">Osteria Oliva Nera, Antiche Carampane, Osteria alle Testiere</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Activities</div>
+                        <div class="info-text">Cicchetti crawl, Top of Carlton viewing spot</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🎨 Florence <span class="family-highlight">Both Families</span></h3>
+                    <div class="info-row">
+                        <div class="info-label">Accommodation</div>
+                        <div class="info-text">Airbnb<br>Via dei Bardi, 33, Florence, FI 50125, Italy</div>
+                        <button class="btn btn-small" onclick="showHotelOnMap('florence', 43.7696, 11.2558, 'Florence Airbnb')">📍 Show on Map</button>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Must See</div>
+                        <div class="info-text">Uffizi Gallery, Academia Gallery, Mercato Centrale</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Restaurants</div>
+                        <div class="info-text">Gusta Pizza, Trattoria Sant'Agostino, La Giostra</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Activities</div>
+                        <div class="info-text">Cooking Class, Boboli Gardens, Leather shopping</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Special</div>
+                        <div class="info-text">Eating Europe Food Tour (3:30pm)</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🏰 Siena <span class="family-highlight">Both Families</span></h3>
+                    <div class="info-row">
+                        <div class="info-label">Clements Stay</div>
+                        <div class="info-text">Palazzetto Rosso<br>Via dei Rossi, 38-42, 53100, Siena</div>
+                        <button class="btn btn-small" onclick="showHotelOnMap('siena', 43.3188, 11.3307, 'Palazzetto Rosso')">📍 Show on Map</button>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Knights Stay</div>
+                        <div class="info-text">TBD - Siena Accommodation</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Activities</div>
+                        <div class="info-text">Cooking class, Historic center exploration</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Note</div>
+                        <div class="info-text">⚠️ Families split here - Clements Sep 29-30, Knights Sep 29-Oct 1</div>
+                    </div>
+                </div>
+                        <div class="info-label">Must See</div>
+                        <div class="info-text">Piazza del Campo, Siena Cathedral</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Local Taste</div>
+                        <div class="info-text">Chianti wine tasting</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Note</div>
+                        <div class="info-text"><strong>Families split after Siena</strong></div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🌊 Sorrento <span class="family-highlight knights">Knights Only</span></h3>
+                    <div class="info-row">
+                        <div class="info-label">Accommodation</div>
+                        <div class="info-text">TBD - Sorrento Hotel<br>Amalfi Coast, 80067 Sorrento</div>
+                        <button class="btn btn-small" onclick="showHotelOnMap('sorrento', 40.6264, 14.3776, 'Sorrento Hotel')">📍 Show on Map</button>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Must See</div>
+                        <div class="info-text">Piazza Tasso, Marina Grande, Mount Vesuvius views</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Restaurants</div>
+                        <div class="info-text">Parucchiano La Favorita (book ahead), La Cantinaccia del Popolo</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Activities</div>
+                        <div class="info-text">Sunset at Piazza della Vittoria, Marina Grande stroll</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Day Trips</div>
+                        <div class="info-text">Capri boat ride, Positano cooking class, Lemon sorbet tasting</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🏖️ Alassio <span class="family-highlight">Clements Only</span></h3>
+                    <div class="info-row">
+                        <div class="info-label">Hotel</div>
+                        <div class="info-text">Grand Hotel Alassio<br>Via Gramsci 2, 17021 Alassio</div>
+                        <button class="btn btn-small" onclick="showHotelOnMap('alassio', 44.0058, 8.1708, 'Grand Hotel Alassio')">📍 Show on Map</button>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Must See</div>
+                        <div class="info-text">Budello di Alassio old town, Beach promenade, Muretto wall</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Activities</div>
+                        <div class="info-text">Beach walks, Italian Riviera relaxation, Coastal exploration</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Dining</div>
+                        <div class="info-text">Seaside cafes, Fresh seafood, Gelato by the beach</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Nicole's Pick</div>
+                        <div class="info-text">Beach walk at sunset with gelato</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🍕 Naples <span class="family-highlight knights">Knights Only</span></h3>
+                    <div class="info-row">
+                        <div class="info-label">Accommodation</div>
+                        <div class="info-text">TBD - Naples Hotel<br>Historic Center, 80100 Naples</div>
+                        <button class="btn btn-small" onclick="showHotelOnMap('naples', 40.8518, 14.2681, 'Naples Hotel')">📍 Show on Map</button>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Must See</div>
+                        <div class="info-text">Historic center, Spaccanapoli street, Naples Cathedral</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Pizza Pilgrimage</div>
+                        <div class="info-text">L'Antica Pizzeria da Michele, Authentic Neapolitan style</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Day Trips</div>
+                        <div class="info-text">Pompeii archaeological site, Mount Vesuvius</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Culture</div>
+                        <div class="info-text">Street art, Local markets, Underground tunnels</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Departure</div>
+                        <div class="info-text">Knights depart October 4 from Naples Airport</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🛍️ Milan <span class="family-highlight">Clements Only</span></h3>
+                    <div class="info-row">
+                        <div class="info-label">Hotel</div>
+                        <div class="info-text">Hotel VIU Milan</div>
+                        <button class="btn btn-small" onclick="showHotelOnMap('milan', 45.4642, 9.1900, 'Hotel VIU Milan')">📍 Show on Map</button>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Dates</div>
+                        <div class="info-text">October 3-4, 2025</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Must See</div>
+                        <div class="info-text">Duomo di Milano, La Scala, Fashion district</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Departure</div>
+                        <div class="info-text">Clements depart Oct 4 from Malpensa Airport</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📋 Detailed Daily Itinerary</h2>
+            <div class="destinations">
+                <div class="destination-card">
+                    <h3>📅 Wednesday 9/24 - Venice Arrival</h3>
+                    <div class="info-row">
+                        <div class="info-label">Morning</div>
+                        <div class="info-text">8am M/L arrive, 11:55am S/S arrive • Try for early Airbnb check-in</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Afternoon</div>
+                        <div class="info-text">St. Mark's Square • Coffee & pastries • 4pm Venice Rialto Market</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Dinner</div>
+                        <div class="info-text">Osteria Oliva Nera</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>📅 Thursday 9/25 - Venice Exploration</h3>
+                    <div class="info-row">
+                        <div class="info-label">Activities</div>
+                        <div class="info-text">Gondola ride • Cicchetti crawl (self-guided)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Evening</div>
+                        <div class="info-text">Top of Carlton view (until 11:30pm)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Dinner</div>
+                        <div class="info-text">Antiche Carampane or Osteria alle Testiere</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>📅 Friday 9/26 - Venice to Florence</h3>
+                    <div class="info-row">
+                        <div class="info-label">Morning</div>
+                        <div class="info-text">Pastry exploration • 11am Venice checkout</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Florence</div>
+                        <div class="info-text">Early check-in • Leather shopping • Boboli Gardens</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Dinner</div>
+                        <div class="info-text">Gusta Pizza or Trattoria Sant'Agostino • Rasputin speakeasy</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>📅 Saturday 9/27 - Florence Culture</h3>
+                    <div class="info-row">
+                        <div class="info-label">Morning</div>
+                        <div class="info-text">Academia Gallery • Mercato Centrale</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Afternoon</div>
+                        <div class="info-text">Cooking Class at Matteo Palmieri, 31 R</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Dinner</div>
+                        <div class="info-text">Restaurant La Giostra</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>📅 Sunday 9/28 - Florence Final Day</h3>
+                    <div class="info-row">
+                        <div class="info-label">Morning</div>
+                        <div class="info-text">Free time • Pastries & people watching</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Afternoon</div>
+                        <div class="info-text">Uffizi Gallery • Eating Europe Food Tour (3:30pm)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Evening</div>
+                        <div class="info-text">Il Santino Wine Bar</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>📅 Monday 9/29 - Florence to Siena</h3>
+                    <div class="info-row">
+                        <div class="info-label">Activity</div>
+                        <div class="info-text">Travel to Siena • Cooking class ($65.01)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Note</div>
+                        <div class="info-text">⚠️ <strong>Families split after this day</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">�️ Restaurant Recommendations</h2>
+            <div class="destinations">
+                <div class="destination-card">
+                    <h3>🏛️ Venice Must-Try</h3>
+                    <div class="info-row">
+                        <div class="info-label">Confirmed</div>
+                        <div class="info-text">Osteria Oliva Nera • Antiche Carampane • Osteria alle Testiere</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Consider</div>
+                        <div class="info-text">All'amarone</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🎨 Florence Favorites</h3>
+                    <div class="info-row">
+                        <div class="info-label">Casual</div>
+                        <div class="info-text">Gusta Pizza • Pino Sandwich • Trattoria Zaza</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Upscale</div>
+                        <div class="info-text">Buca Mario (Nonna's lasagna) • La Giostra (carbonara w/ artichokes)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Specialty</div>
+                        <div class="info-text">Osteria Delle Tre Panche (truffle pasta) • La Menagere (aesthetic)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Gelato</div>
+                        <div class="info-text">Vivioli Gelato</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🌊 Sorrento Specialties</h3>
+                    <div class="info-row">
+                        <div class="info-label">Book Ahead</div>
+                        <div class="info-text">Parucchiano La Favorita (under lemon trees)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">No Reservations</div>
+                        <div class="info-text">La Cantinaccia del Popolo (free cheese & wine while waiting)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🛍️ Shopping & Activities</h2>
+            <div class="destinations">
+                <div class="destination-card">
+                    <h3>🎨 Florence Shopping</h3>
+                    <div class="info-row">
+                        <div class="info-label">Leather</div>
+                        <div class="info-text">Mercato Centrale (can barter) • Italian leather bags</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Unique</div>
+                        <div class="info-text">Brilli Firenze (personalized gifts) • Signum (stationary)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Beauty</div>
+                        <div class="info-text">Officina Profumo - Santa Maria Novella (oldest pharmacy)</div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🌊 Sorrento Activities</h3>
+                    <div class="info-row">
+                        <div class="info-label">Views</div>
+                        <div class="info-text">Sunset at Piazza della Vittoria (Mount Vesuvius view)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Experiences</div>
+                        <div class="info-text">Boat ride • Cooking class in Positano • Lemon sorbet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">�🎒 Travel Resources</h2>
+            <div class="destinations">
+                <div class="destination-card">
+                    <h3>🍽️ Food Tours & Experiences</h3>
+                    <div class="info-row">
+                        <div class="info-label">Eating Europe Tours</div>
+                        <div class="info-text">
+                            <a href="https://www.eatingeurope.com/rome-food-tours/" target="_blank" rel="noopener" class="resource-link">Rome Food Tours</a><br>
+                            <a href="https://www.eatingeurope.com/florence-food-tours/" target="_blank" rel="noopener" class="resource-link">Florence Food Tours</a><br>
+                            <a href="https://www.eatingeurope.com/venice-food-tours/" target="_blank" rel="noopener" class="resource-link">Venice Food Tours</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🚇 Transportation</h3>
+                    <div class="info-row">
+                        <div class="info-label">Train Services</div>
+                        <div class="info-text">
+                            <a href="https://www.trenitalia.com/en.html" target="_blank" rel="noopener" class="resource-link">Trenitalia - Main Train Service</a><br>
+                            <a href="https://www.italotreno.it/en" target="_blank" rel="noopener" class="resource-link">Italo - High Speed Trains</a><br>
+                            <a href="https://www.atac.roma.it/en" target="_blank" rel="noopener" class="resource-link">Rome Public Transport</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🎫 Attractions & Tickets</h3>
+                    <div class="info-row">
+                        <div class="info-label">Major Attractions</div>
+                        <div class="info-text">
+                            <a href="https://www.uffizi.it/en/tickets" target="_blank" rel="noopener" class="resource-link">Uffizi Gallery - Florence</a><br>
+                            <a href="https://www.palazzoducale.visitmuve.it/en/home/" target="_blank" rel="noopener" class="resource-link">Doge's Palace - Venice</a><br>
+                            <a href="https://pompeiisites.org/" target="_blank" rel="noopener" class="resource-link">Pompeii Archaeological Site</a><br>
+                            <a href="https://www.duomomilano.it/en/" target="_blank" rel="noopener" class="resource-link">Milan Cathedral</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>📱 Essential Apps</h3>
+                    <div class="info-row">
+                        <div class="info-label">Mobile Tools</div>
+                        <div class="info-text">
+                            <a href="https://translate.google.com/" target="_blank" rel="noopener" class="resource-link">Google Translate</a><br>
+                            <a href="https://www.tripadvisor.com/" target="_blank" rel="noopener" class="resource-link">TripAdvisor</a><br>
+                            <a href="https://maps.google.com/" target="_blank" rel="noopener" class="resource-link">Google Maps (Offline)</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>💰 Money & Emergency</h3>
+                    <div class="info-row">
+                        <div class="info-label">Important Info</div>
+                        <div class="info-text">
+                            <a href="https://www.xe.com/currencyconverter/" target="_blank" rel="noopener" class="resource-link">Currency Converter</a><br>
+                            <span class="info-note">Tipping: 10-15% at restaurants</span><br>
+                            <span class="info-note">Emergency: 112 (EU Emergency)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <h3>🇮🇹 Quick Italian Phrases</h3>
+                    <div class="info-row">
+                        <div class="info-label">Essential Phrases</div>
+                        <div class="info-text">
+                            <span class="info-note">Grazie = Thank you</span><br>
+                            <span class="info-note">Prego = You're welcome</span><br>
+                            <span class="info-note">Scusi = Excuse me</span><br>
+                            <span class="info-note">Dov'è = Where is</span><br>
+                            <span class="info-note">Il conto, per favore = The bill, please</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="footer">
-        <p> Buon Viaggio! Safe travels! </p>
+        <p>🇮🇹 Buon Viaggio! Safe travels! ✈️</p>
     </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const clementsMap = L.map('clements-map').setView([43.7696, 11.2558], 6);
-        const knightsMap = L.map('knights-map').setView([43.7696, 11.2558], 6);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: ' OpenStreetMap' }).addTo(clementsMap);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: ' OpenStreetMap' }).addTo(knightsMap);
+        // Initialize map
+        const map = L.map('main-map').setView([43.7696, 11.2558], 6);
+
+        // Add tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Locations for each family in chronological order
         const clementsLocations = [
-            { name: 'Venice', lat: 45.4408, lng: 12.3155, dates: 'Sep 23-24', icon: '', order: 1 },
-            { name: 'Florence', lat: 43.7696, lng: 11.2558, dates: 'Sep 25-26', icon: '', order: 2 },
-            { name: 'Siena', lat: 43.3188, lng: 11.3307, dates: 'Sep 27', icon: '', order: 3 },
-            { name: 'Alassio', lat: 44.0058, lng: 8.1708, dates: 'Sep 28-Oct 2', icon: '', order: 4 },
-            { name: 'Milan', lat: 45.4642, lng: 9.1900, dates: 'Oct 3-4', icon: '', order: 5 }
+            { name: 'Venice', lat: 45.4408, lng: 12.3155, dates: 'Sep 23-24', icon: '🏛️', order: 1 },
+            { name: 'Florence', lat: 43.7696, lng: 11.2558, dates: 'Sep 25-26', icon: '🎨', order: 2 },
+            { name: 'Siena', lat: 43.3188, lng: 11.3307, dates: 'Sep 27', icon: '🏰', order: 3 },
+            { name: 'Alassio', lat: 44.0058, lng: 8.1708, dates: 'Sep 28-Oct 2', icon: '�️', order: 4 },
+            { name: 'Milan', lat: 45.4642, lng: 9.1900, dates: 'Oct 3-4', icon: '🛍️', order: 5 }
         ];
+
         const knightsLocations = [
-            { name: 'Venice', lat: 45.4408, lng: 12.3155, dates: 'Sep 23-24', icon: '', order: 1 },
-            { name: 'Florence', lat: 43.7696, lng: 11.2558, dates: 'Sep 25-26', icon: '', order: 2 },
-            { name: 'Siena', lat: 43.3188, lng: 11.3307, dates: 'Sep 27', icon: '', order: 3 },
-            { name: 'Sorrento', lat: 40.6264, lng: 14.3776, dates: 'Sep 28-Oct 1', icon: '', order: 4 },
-            { name: 'Naples', lat: 40.8518, lng: 14.2681, dates: 'Oct 2-3', icon: '', order: 5 }
+            { name: 'Venice', lat: 45.4408, lng: 12.3155, dates: 'Sep 23-24', icon: '�️', order: 1 },
+            { name: 'Florence', lat: 43.7696, lng: 11.2558, dates: 'Sep 25-26', icon: '🎨', order: 2 },
+            { name: 'Siena', lat: 43.3188, lng: 11.3307, dates: 'Sep 27', icon: '🏰', order: 3 },
+            { name: 'Sorrento', lat: 40.6264, lng: 14.3776, dates: 'Sep 28-Oct 1', icon: '�', order: 4 },
+            { name: 'Naples', lat: 40.8518, lng: 14.2681, dates: 'Oct 2-3', icon: '🍕', order: 5 }
         ];
-        const mapLayers = { clements: { markers: [], route: null }, knights: { markers: [], route: null } };
-        function createNumberedIcon(number, color) {
-            const gradientColor = color === '#48bb78' ? '#38a169' : '#dd6b20';
+
+        // Current active family and map layers
+        let currentFamily = 'clements';
+        let currentMarkers = [];
+        let currentRoute = null;
+        let currentArrows = [];
+
+        // Create custom numbered markers with family colors
+        function createNumberedIcon(number, color = '#4299e1') {
+            const gradientColor = color === '#48bb78' ? '#38a169' : (color === '#ed8936' ? '#dd6b20' : '#3182ce');
             return L.divIcon({
-                html: '<div style="background: linear-gradient(135deg, ' + color + ' 0%, ' + gradientColor + ' 100%); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">' + number + '</div>',
-                className: 'custom-div-icon', iconSize: [30, 30], iconAnchor: [15, 15]
+                html: `<div style="
+                    background: linear-gradient(135deg, ${color} 0%, ${gradientColor} 100%);
+                    color: white;
+                    border-radius: 50%;
+                    width: 30px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 14px;
+                    border: 3px solid white;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                ">${number}</div>`,
+                className: 'custom-div-icon',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
             });
         }
-        function initializeFamilyMap(family, mapInstance, locations, routeColor) {
-            const layers = mapLayers[family];
+
+        // Function to clear current map elements
+        function clearMapLayers() {
+            // Remove all current markers
+            currentMarkers.forEach(marker => map.removeLayer(marker));
+            currentMarkers = [];
+            
+            // Remove current route
+            if (currentRoute) {
+                map.removeLayer(currentRoute);
+                currentRoute = null;
+            }
+            
+            // Remove direction arrows
+            currentArrows.forEach(arrow => map.removeLayer(arrow));
+            currentArrows = [];
+        }
+
+        // Function to update map for selected family
+        function updateMap(family) {
+            clearMapLayers();
+            
+            const locations = family === 'clements' ? clementsLocations : knightsLocations;
+            const routeColor = family === 'clements' ? '#48bb78' : '#ed8936';
+            
+            // Add numbered markers and route path
             const routeCoordinates = [];
+
             locations.forEach((loc, index) => {
+                // Add coordinates to route
                 routeCoordinates.push([loc.lat, loc.lng]);
-                const marker = L.marker([loc.lat, loc.lng], { icon: createNumberedIcon(loc.order, routeColor) }).addTo(mapInstance);
+                
+                // Create numbered marker
+                const marker = L.marker([loc.lat, loc.lng], {
+                    icon: createNumberedIcon(loc.order, routeColor)
+                }).addTo(map);
+                
+                // Enhanced popup with step number and family
                 const familyName = family === 'clements' ? 'Clements' : 'Knights';
-                marker.bindPopup('<div style="text-align: center; min-width: 150px;"><strong style="color: ' + routeColor + '; font-size: 16px;">' + familyName + ' - Stop ' + loc.order + '</strong><br><strong>' + loc.icon + ' ' + loc.name + '</strong><br><span style="color: #718096;">' + loc.dates + '</span></div>');
-                layers.markers.push(marker);
+                marker.bindPopup(`
+                    <div style="text-align: center; min-width: 150px;">
+                        <strong style="color: ${routeColor}; font-size: 16px;">${familyName} - Stop ${loc.order}</strong><br>
+                        <strong>${loc.icon} ${loc.name}</strong><br>
+                        <span style="color: #718096;">${loc.dates}</span>
+                    </div>
+                `);
+                
+                currentMarkers.push(marker);
             });
-            layers.route = L.polyline(routeCoordinates, { color: routeColor, weight: 4, opacity: 0.8, dashArray: '10, 5' }).addTo(mapInstance);
-            if (layers.markers.length > 0) {
-                const markerGroup = L.featureGroup(layers.markers);
-                mapInstance.fitBounds(markerGroup.getBounds(), { padding: [30, 30] });
+
+            // Draw the complete route path
+            currentRoute = L.polyline(routeCoordinates, {
+                color: routeColor,
+                weight: 4,
+                opacity: 0.8,
+                dashArray: '10, 5',
+                lineCap: 'round',
+                lineJoin: 'round'
+            }).addTo(map);
+
+            // Add direction arrows along the path
+            locations.forEach((loc, index) => {
+                if (index > 0) {
+                    const prev = locations[index - 1];
+                    const midLat = (prev.lat + loc.lat) / 2;
+                    const midLng = (prev.lng + loc.lng) / 2;
+                    
+                    // Calculate bearing for arrow direction
+                    const bearing = Math.atan2(loc.lng - prev.lng, loc.lat - prev.lat) * 180 / Math.PI;
+                    
+                    // Add arrow marker
+                    const arrow = L.marker([midLat, midLng], {
+                        icon: L.divIcon({
+                            html: `<div style="
+                                color: ${routeColor};
+                                font-size: 20px;
+                                transform: rotate(${bearing + 90}deg);
+                                text-shadow: 0 0 3px white;
+                            ">➤</div>`,
+                            className: 'arrow-icon',
+                            iconSize: [20, 20],
+                            iconAnchor: [10, 10]
+                        })
+                    }).addTo(map);
+                    
+                    currentArrows.push(arrow);
+                }
+            });
+
+            // Fit map to show all markers with padding
+            if (currentMarkers.length > 0) {
+                const markerGroup = L.featureGroup(currentMarkers);
+                map.fitBounds(markerGroup.getBounds(), { padding: [30, 30] });
             }
+            
+            // Update current family
+            currentFamily = family;
         }
-        function fitMapToBounds(family) {
-            const mapInstance = family === 'clements' ? clementsMap : knightsMap;
-            const layers = mapLayers[family];
-            if (layers.markers.length > 0) {
-                const markerGroup = L.featureGroup(layers.markers);
-                mapInstance.fitBounds(markerGroup.getBounds(), { padding: [30, 30] });
+
+        // Create marker group for hotel markers
+        const group = L.featureGroup();
+
+        // Store hotel markers for easy access
+        let hotelMarkers = {};
+        let currentHotelMarker = null;
+
+        // Initialize map with Clements route
+        updateMap('clements');
+
+        // Function to show hotel on map
+        function showHotelOnMap(city, lat, lng, hotelName) {
+            // Remove previous hotel marker if exists
+            if (currentHotelMarker) {
+                map.removeLayer(currentHotelMarker);
             }
+            
+            // Create hotel marker with different icon
+            currentHotelMarker = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    html: `<div style="
+                        background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+                        color: white;
+                        border-radius: 50%;
+                        width: 25px;
+                        height: 25px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+                        font-size: 12px;
+                        border: 3px solid white;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+                    ">🏨</div>`,
+                    className: 'hotel-marker',
+                    iconSize: [25, 25],
+                    iconAnchor: [12.5, 12.5]
+                })
+            }).addTo(map);
+            
+            // Enhanced hotel popup
+            currentHotelMarker.bindPopup(`
+                <div style="text-align: center; min-width: 180px;">
+                    <strong style="color: #e53e3e; font-size: 16px;">🏨 Your Hotel</strong><br>
+                    <strong>${hotelName}</strong><br>
+                    <span style="color: #718096;">${city.charAt(0).toUpperCase() + city.slice(1)}</span><br>
+                    <button onclick="map.setView([${lat}, ${lng}], 15)" style="
+                        background: #4299e1;
+                        color: white;
+                        border: none;
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 4px;
+                        margin-top: 0.5rem;
+                        cursor: pointer;
+                        font-size: 0.8rem;
+                    ">Zoom In</button>
+                </div>
+            `).openPopup();
+            
+            // Center map on hotel with closer zoom
+            map.setView([lat, lng], 13);
+            
+            // Scroll to map section
+            document.getElementById('main-map').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
         }
-        initializeFamilyMap('clements', clementsMap, clementsLocations, '#48bb78');
-        initializeFamilyMap('knights', knightsMap, knightsLocations, '#ed8936');
+
+        // Draw the complete route path
+        // (This is now handled by updateMap function)
+
+        // Add direction arrows along the path
+        // (This is now handled by updateMap function)
+
+        // Add a legend
+        const legend = L.control({ position: 'bottomright' });
+        legend.onAdd = function(map) {
+            const div = L.DomUtil.create('div', 'legend');
+            div.innerHTML = `
+                <div style="
+                    background: white;
+                    padding: 10px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                    font-size: 12px;
+                    line-height: 1.4;
+                ">
+                    <strong style="color: #2d3748;">Family Journey</strong><br>
+                    <span style="color: #48bb78;">━━━</span> Clements Route<br>
+                    <span style="color: #ed8936;">━━━</span> Knights Route<br>
+                    <span style="color: #4299e1; font-size: 16px;">●</span> Numbered by arrival order
+                </div>
+            `;
+            return div;
+        };
+        legend.addTo(map);
+
+        // Fit map initially (will be updated by updateMap)
+        // map.fitBounds(group.getBounds(), { padding: [30, 30] });
+
+        // Mobile menu toggle function
+        function toggleMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const overlay = document.querySelector('.overlay');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Family itinerary switching
+        function showItinerary(family) {
+            // Update tab appearance
+            document.querySelectorAll('.family-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show/hide itinerary content
+            document.querySelectorAll('.itinerary-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(family + '-itinerary').classList.add('active');
+            
+            // Update the map to show the selected family's route
+            updateMap(family);
+        }
     </script>
 </body>
 </html>
