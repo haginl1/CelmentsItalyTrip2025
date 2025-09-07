@@ -6,32 +6,120 @@
     <title>Italy 2025  - Dual Maps</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.5; color: #1a202c; background: #f7fafc; }
-        .header { background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); color: white; padding: 1.5rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem; }
-        .header p { font-size: 0.9rem; opacity: 0.9; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
-        .section { padding: 1.5rem 0; }
-        .section-title { font-size: 1.4rem; text-align: center; margin-bottom: 1.5rem; color: #2d3748; font-weight: 600; }
-        .dual-maps-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-        .family-map-container { background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .family-map-header { text-align: center; margin-bottom: 1rem; padding: 0.75rem; border-radius: 6px; color: white; font-weight: 600; font-size: 1.1rem; }
-        .family-map-header.clements { background: linear-gradient(135deg, #48bb78, #38a169); }
-        .family-map-header.knights { background: linear-gradient(135deg, #ed8936, #dd6b20); }
-        .dual-map { height: 400px; border-radius: 6px; width: 100%; }
-        .btn { background: #4299e1; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 1rem; font-size: 1rem; }
-        .btn:hover { background: #3182ce; }
-        @media (max-width: 768px) { 
-            .dual-maps-container { grid-template-columns: 1fr; gap: 1rem; } 
-            .dual-map { height: 300px; } 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .footer { background: #2d3748; color: white; text-align: center; padding: 1.5rem; margin-top: 2rem; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            line-height: 1.5;
+            color: #1a202c;
+            background: #f7fafc;
+            font-size: 16px;
+        }
+        .header {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .section {
+            padding: 1.5rem 0;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            font-weight: 600;
+        }
+        .dual-maps-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .family-map-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .family-map-header {
+            text-align: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .family-map-header.clements {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+        }
+        .family-map-header.knights {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+        }
+        .dual-map {
+            height: 400px;
+            border-radius: 6px;
+            width: 100%;
+        }
+        .btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background: #3182ce;
+        }
+        @media (max-width: 768px) {
+            .dual-maps-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .dual-map {
+                height: 300px;
+            }
+        }
+        .footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: 2rem;
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1> Italy 2025 - Dual Maps</h1>
+        <h1> Italy 2025</h1>
         <p>Sep 23 - Oct 4  Two Family Adventures</p>
     </div>
     <div class="container">
@@ -62,8 +150,12 @@
     <script>
         const clementsMap = L.map('clements-map').setView([43.7696, 11.2558], 6);
         const knightsMap = L.map('knights-map').setView([43.7696, 11.2558], 6);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: ' OpenStreetMap' }).addTo(clementsMap);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: ' OpenStreetMap' }).addTo(knightsMap);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: ' OpenStreetMap'
+        }).addTo(clementsMap);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: ' OpenStreetMap'
+        }).addTo(knightsMap);
         const clementsLocations = [
             { name: 'Venice', lat: 45.4408, lng: 12.3155, dates: 'Sep 23-24', icon: '', order: 1 },
             { name: 'Florence', lat: 43.7696, lng: 11.2558, dates: 'Sep 25-26', icon: '', order: 2 },
@@ -78,12 +170,17 @@
             { name: 'Sorrento', lat: 40.6264, lng: 14.3776, dates: 'Sep 28-Oct 1', icon: '', order: 4 },
             { name: 'Naples', lat: 40.8518, lng: 14.2681, dates: 'Oct 2-3', icon: '', order: 5 }
         ];
-        const mapLayers = { clements: { markers: [], route: null }, knights: { markers: [], route: null } };
+        const mapLayers = {
+            clements: { markers: [], route: null, arrows: [] },
+            knights: { markers: [], route: null, arrows: [] }
+        };
         function createNumberedIcon(number, color) {
             const gradientColor = color === '#48bb78' ? '#38a169' : '#dd6b20';
             return L.divIcon({
                 html: '<div style="background: linear-gradient(135deg, ' + color + ' 0%, ' + gradientColor + ' 100%); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">' + number + '</div>',
-                className: 'custom-div-icon', iconSize: [30, 30], iconAnchor: [15, 15]
+                className: 'custom-div-icon',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
             });
         }
         function initializeFamilyMap(family, mapInstance, locations, routeColor) {
@@ -91,12 +188,21 @@
             const routeCoordinates = [];
             locations.forEach((loc, index) => {
                 routeCoordinates.push([loc.lat, loc.lng]);
-                const marker = L.marker([loc.lat, loc.lng], { icon: createNumberedIcon(loc.order, routeColor) }).addTo(mapInstance);
+                const marker = L.marker([loc.lat, loc.lng], {
+                    icon: createNumberedIcon(loc.order, routeColor)
+                }).addTo(mapInstance);
                 const familyName = family === 'clements' ? 'Clements' : 'Knights';
                 marker.bindPopup('<div style="text-align: center; min-width: 150px;"><strong style="color: ' + routeColor + '; font-size: 16px;">' + familyName + ' - Stop ' + loc.order + '</strong><br><strong>' + loc.icon + ' ' + loc.name + '</strong><br><span style="color: #718096;">' + loc.dates + '</span></div>');
                 layers.markers.push(marker);
             });
-            layers.route = L.polyline(routeCoordinates, { color: routeColor, weight: 4, opacity: 0.8, dashArray: '10, 5' }).addTo(mapInstance);
+            layers.route = L.polyline(routeCoordinates, {
+                color: routeColor,
+                weight: 4,
+                opacity: 0.8,
+                dashArray: '10, 5',
+                lineCap: 'round',
+                lineJoin: 'round'
+            }).addTo(mapInstance);
             if (layers.markers.length > 0) {
                 const markerGroup = L.featureGroup(layers.markers);
                 mapInstance.fitBounds(markerGroup.getBounds(), { padding: [30, 30] });
