@@ -1,3 +1,12 @@
+/* Dual Maps for Trip Section */
+#clements-map, #knights-map {
+  height: 400px;
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+  min-width: 300px;
+  background: #eaf6ff;
+}
 /* Reset and Base Styles */
 * {
   margin: 0;
